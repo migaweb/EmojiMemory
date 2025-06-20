@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiMemory.UI.Domain", "UI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiMemory.UI.Infrastructure", "EmojiMemory.UI.Infrastructure\EmojiMemory.UI.Infrastructure.csproj", "{C85D40E7-6085-416F-9171-161C9ECB76B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0C88DD14-F956-CE84-757C-A364CCF449FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiMemory.Tests.UnitTests", "Test\EmojiMemory.Tests.UnitTests\EmojiMemory.Tests.UnitTests.csproj", "{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +80,18 @@ Global
 		{C85D40E7-6085-416F-9171-161C9ECB76B0}.Release|x64.Build.0 = Release|Any CPU
 		{C85D40E7-6085-416F-9171-161C9ECB76B0}.Release|x86.ActiveCfg = Release|Any CPU
 		{C85D40E7-6085-416F-9171-161C9ECB76B0}.Release|x86.Build.0 = Release|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Debug|x64.Build.0 = Debug|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Debug|x86.Build.0 = Debug|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Release|x64.ActiveCfg = Release|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Release|x64.Build.0 = Release|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Release|x86.ActiveCfg = Release|Any CPU
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +101,7 @@ Global
 		{519C2B56-BC80-9C21-0BC1-1A6A17452F27} = {81B214D6-C655-4A36-B93A-77595C03CBDC}
 		{6A601674-ECD7-C432-538E-2D44251A28B8} = {81B214D6-C655-4A36-B93A-77595C03CBDC}
 		{C85D40E7-6085-416F-9171-161C9ECB76B0} = {81B214D6-C655-4A36-B93A-77595C03CBDC}
+		{89A7BC6A-47A2-49F4-A59B-1C3C31B22FDF} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B99EEAC-33A4-49D6-8C21-4F4FC685E14D}
