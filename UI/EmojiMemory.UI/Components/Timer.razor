@@ -1,0 +1,30 @@
+@implements IDisposable
+@inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
+@using System.Timers
+
+<span class="timer">@FormattedTime</span>
+
+@code {
+    private readonly Timer _updateTimer = new(1000);
+
+    private string FormattedTime => GameEngine.Elapsed.ToString(@"mm\:ss");
+
+    protected override void OnInitialized()
+    {
+        _updateTimer.Elapsed += OnElapsed;
+        _updateTimer.AutoReset = true;
+        _updateTimer.Start();
+    }
+
+    private void OnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _updateTimer.Elapsed -= OnElapsed;
+        _updateTimer.Stop();
+        _updateTimer.Dispose();
+    }
+}

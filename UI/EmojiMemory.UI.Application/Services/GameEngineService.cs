@@ -14,6 +14,8 @@ public class GameEngineService
 
     public GameSession Session { get; private set; } = new();
 
+    public TimeSpan Elapsed => _stopwatch.Elapsed;
+
     public void StartGame(GridSize size, IEnumerable<EmojiId> emojis)
     {
         _emojiPool = emojis.ToList();
