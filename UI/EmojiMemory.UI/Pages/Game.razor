@@ -1,26 +1,30 @@
 ﻿@page "/game"
 @inject NavigationManager NavigationManager
+@inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
+@using EmojiMemory.UI.Domain.Entities
+@using EmojiMemory.UI.Domain.Enums
+@using EmojiMemory.UI.Domain.ValueObjects
 
 <PageTitle>Emoji Memory Match</PageTitle>
 
-<div class="game-container">
-  @if (Cards.Count <= 0)
-  {
-    <p>Loading game...</p>
-  }
-  else
-  {
-    <div class="game-grid" style="grid-template-columns: repeat(@Cols, 1fr);">
-      @foreach (var card in Cards)
-      {
-        <button class="card @(card.IsMatched ? "matched" : "") @(card.IsFlipped ? "flipped" : "")"
-                @onclick="@(() => OnCardClicked(card))">
-          <span>@(card.IsFlipped || card.IsMatched ? card.Emoji : "❓")</span>
-        </button>
-      }
-    </div>
-  }
-</div>
+  <div class="game-container">
+    @if (GameEngine.Session.Board.Cards.Count <= 0)
+    {
+      <p>Loading game...</p>
+    }
+    else
+    {
+      <div class="game-grid" style="grid-template-columns: repeat(@Cols, 1fr);">
+        @foreach (var card in GameEngine.Session.Board.Cards)
+        {
+          <button class="card @(card.State == CardState.Matched ? "matched" : "") @(card.State == CardState.FaceUp ? "flipped" : "")"
+                  @onclick="@(() => OnCardClicked(card))">
+            <span>@(card.State == CardState.FaceUp || card.State == CardState.Matched ? card.Emoji.Symbol : "❓")</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
 
 @code {
   [Parameter]
@@ -28,10 +32,6 @@
 
   [Parameter]
   [SupplyParameterFromQuery] public int Cols { get; set; } = 4;
-
-  private List<CardModel> Cards = [];
-  private CardModel? firstCard = null;
-  private bool boardLocked = false;
 
   private static readonly string[] EmojiPool = new[] { "🐶", "🍕", "🚀", "🐸", "🎈", "🎮", "🎁", "🧠", "🐱", "🍩" };
 
@@ -43,28 +43,16 @@
   private void InitializeGame()
   {
     var totalCards = Rows * Cols;
-    var emojiPairs = EmojiPool.OrderBy(_ => Guid.NewGuid()).Take(totalCards / 2).ToList();
-    var fullDeck = emojiPairs.Concat(emojiPairs).OrderBy(_ => Guid.NewGuid()).ToList();
+    var emojis = EmojiPool
+      .OrderBy(_ => Guid.NewGuid())
+      .Take(totalCards / 2)
+      .Select(e => new EmojiId(e));
 
-    Cards = fullDeck.Select((emoji, index) => new CardModel
-    {
-      Id = index,
-      Emoji = emoji,
-      IsFlipped = false,
-      IsMatched = false
-    }).ToList();
+    GameEngine.StartGame(new GridSize(Rows, Cols), emojis);
   }
 
-  private async Task OnCardClicked(CardModel clicked)
+  private async Task OnCardClicked(Card clicked)
   {
 
-  }
-
-  private class CardModel
-  {
-    public int Id { get; set; }
-    public string Emoji { get; set; }
-    public bool IsFlipped { get; set; }
-    public bool IsMatched { get; set; }
   }
 }
