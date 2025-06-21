@@ -1,0 +1,31 @@
+﻿.game-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.game-grid {
+  display: grid;
+  gap: 10px;
+  justify-content: center;
+}
+
+.card {
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  background-color: #f0f0f0;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .card.matched {
+    background-color: #c8e6c9;
+    cursor: default;
+  }
