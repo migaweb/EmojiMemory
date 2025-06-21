@@ -33,6 +33,7 @@
   [Parameter]
   [SupplyParameterFromQuery] public int Cols { get; set; } = 4;
 
+  private bool boardLocked = false;
   private static readonly string[] EmojiPool = new[] { "🐶", "🍕", "🚀", "🐸", "🎈", "🎮", "🎁", "🧠", "🐱", "🍩" };
 
   protected override void OnInitialized()
@@ -53,6 +54,21 @@
 
   private async Task OnCardClicked(Card clicked)
   {
+    if (boardLocked || clicked.State != CardState.FaceDown)
+    {
+      return;
+    }
 
+    GameEngine.FlipCard(clicked.Position);
+    StateHasChanged();
+
+    if (GameEngine.Session.Board.Cards.Count(c => c.State == CardState.FaceUp) == 2)
+    {
+      boardLocked = true;
+      await Task.Delay(750);
+      GameEngine.EvaluateFlip();
+      boardLocked = false;
+      StateHasChanged();
+    }
   }
 }
