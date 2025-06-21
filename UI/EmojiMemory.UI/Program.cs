@@ -5,6 +5,7 @@ using EmojiMemory.UI.Infrastructure.Storage;
 using EmojiMemory.UI.Application.Repositories;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using EmojiMemory.UI.Infrastructure.Sound;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,5 +15,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IHighscore, LocalStorageHighscore>();
 builder.Services.AddScoped<IEmojiRepository, HardcodedEmojiRepository>();
 builder.Services.AddScoped<GameEngineService>();
+builder.Services.AddScoped<ISoundService, SoundService>();
 
 await builder.Build().RunAsync();

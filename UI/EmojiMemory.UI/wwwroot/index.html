@@ -12,43 +12,44 @@
 </head>
 
 <body>
-    <div id="app">
-        <svg class="loading-progress" style="display:none">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
-        <div id="emoji-progress" class="emoji-progress"></div>
-    </div>
+  <div id="app">
+    <svg class="loading-progress" style="display:none">
+      <circle r="40%" cx="50%" cy="50%" />
+      <circle r="40%" cx="50%" cy="50%" />
+    </svg>
+    <div class="loading-progress-text"></div>
+    <div id="emoji-progress" class="emoji-progress"></div>
+  </div>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="." class="reload">Reload</a>
-        <span class="dismiss">🗙</span>
-    </div>
-    <script>
-        (function () {
-            const emojiBar = document.getElementById('emoji-progress');
-            const emojis = ['😀','🎉','🤖','🚀','🦄','🌈','🍕','🎲','🎯','🏆'];
-            let lastCount = -1;
+  <div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+  </div>
+  <script>
+    (function () {
+      const emojiBar = document.getElementById('emoji-progress');
+      const emojis = ['😀', '🎉', '🤖', '🚀', '🦄', '🌈', '🍕', '🎲', '🎯', '🏆'];
+      let lastCount = -1;
 
-            function update() {
-                const val = parseFloat(
-                    getComputedStyle(document.documentElement)
-                        .getPropertyValue('--blazor-load-percentage')
-                ) || 0;
+      function update() {
+        const val = parseFloat(
+          getComputedStyle(document.documentElement)
+            .getPropertyValue('--blazor-load-percentage')
+        ) || 0;
 
-                const count = Math.floor(val / 10);
-                if (count !== lastCount) {
-                    emojiBar.textContent = emojis.slice(0, count).join('');
-                    lastCount = count;
-                }
-                requestAnimationFrame(update);
-            }
-            update();
-        })();
-    </script>
-    <script src="_framework/blazor.webassembly.js"></script>
+        const count = Math.floor(val / 10);
+        if (count !== lastCount) {
+          emojiBar.textContent = emojis.slice(0, count).join('');
+          lastCount = count;
+        }
+        requestAnimationFrame(update);
+      }
+      update();
+    })();
+  </script>
+  <script src="_framework/blazor.webassembly.js"></script>
+  <script src="scripts/sound-player.js"></script>
 </body>
 
 </html>
