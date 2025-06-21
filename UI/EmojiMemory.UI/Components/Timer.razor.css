@@ -1,0 +1,13 @@
+﻿.timer {
+  display: inline-block;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 0.4rem 1rem;
+  border: 2px solid #ffeeba;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin: 1rem auto;
+  transition: all 0.2s ease-in-out;
+}

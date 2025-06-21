@@ -5,7 +5,7 @@
 <span class="timer">@FormattedTime</span>
 
 @code {
-    private readonly Timer _updateTimer = new(1000);
+    private readonly System.Timers.Timer _updateTimer = new(1000);
 
     private string FormattedTime => GameEngine.Elapsed.ToString(@"mm\:ss");
 
