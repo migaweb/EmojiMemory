@@ -4,7 +4,7 @@
 <button class="pause-button" @onclick="Toggle">@Label</button>
 
 @code {
-    private string Label => GameEngine.Session.State == GameState.Paused ? "Resume" : "Pause";
+    private string Label => GameEngine.Session.State == GameState.Paused ? "▶️" : "⏸️";
 
     private void Toggle()
     {
