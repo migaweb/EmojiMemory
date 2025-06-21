@@ -74,6 +74,13 @@
         content: var(--blazor-load-percentage-text, "Loading");
     }
 
+.emoji-progress {
+    position: absolute;
+    text-align: center;
+    font-size: 1.5rem;
+    inset: calc(20vh + 5rem) 0 auto 0;
+}
+
 code {
     color: #c02d76;
 }
