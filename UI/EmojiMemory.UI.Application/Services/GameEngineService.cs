@@ -63,7 +63,7 @@ public class GameEngineService
         }
     }
 
-    public void EvaluateFlip()
+    public async Task EvaluateFlip()
     {
         if (_firstCard == null || _secondCard == null)
         {
@@ -90,7 +90,7 @@ public class GameEngineService
             Session.State = GameState.Completed;
             Session.Board.State = GameState.Completed;
             StopTimer();
-            CheckHighscoreAsync().GetAwaiter().GetResult();
+            await CheckHighscoreAsync();
         }
     }
 

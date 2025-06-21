@@ -79,7 +79,7 @@
     {
       boardLocked = true;
       await Task.Delay(750);
-      GameEngine.EvaluateFlip();
+      await GameEngine.EvaluateFlip();
       boardLocked = false;
       StateHasChanged();
     }
