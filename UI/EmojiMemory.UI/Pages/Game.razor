@@ -1,4 +1,5 @@
-﻿@page "/game"
+@page "/game"
+@implements IDisposable
 @inject NavigationManager NavigationManager
 @inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
 @using EmojiMemory.UI.Domain.Entities
@@ -53,7 +54,13 @@
 
   protected override void OnInitialized()
   {
+    GameEngine.StateChanged += OnStateChanged;
     InitializeGame();
+  }
+
+  public void Dispose()
+  {
+    GameEngine.StateChanged -= OnStateChanged;
   }
 
   private void InitializeGame()
@@ -98,5 +105,10 @@
   private void GoToMenu()
   {
     NavigationManager.NavigateTo("/");
+  }
+
+  private void OnStateChanged()
+  {
+    InvokeAsync(StateHasChanged);
   }
 }

@@ -14,6 +14,10 @@ public class GameEngineService
     private Card? _secondCard;
     private List<EmojiId> _emojiPool = new();
 
+    public event Action? StateChanged;
+
+    private void NotifyStateChanged() => StateChanged?.Invoke();
+
     public GameEngineService(IHighscore highscore)
     {
         _highscore = highscore;
@@ -42,6 +46,7 @@ public class GameEngineService
         _firstCard = null;
         _secondCard = null;
         BeginTimer();
+        NotifyStateChanged();
     }
 
     public void FlipCard(Position position)
@@ -91,6 +96,7 @@ public class GameEngineService
             Session.Board.State = GameState.Completed;
             StopTimer();
             await CheckHighscoreAsync();
+            NotifyStateChanged();
         }
     }
 
@@ -109,6 +115,7 @@ public class GameEngineService
         Session.State = GameState.Paused;
         Session.Board.State = GameState.Paused;
         StopTimer();
+        NotifyStateChanged();
     }
 
     public void ResumeGame()
@@ -116,6 +123,7 @@ public class GameEngineService
         Session.State = GameState.InProgress;
         Session.Board.State = GameState.InProgress;
         _stopwatch.Start();
+        NotifyStateChanged();
     }
 
     private async ValueTask CheckHighscoreAsync()
