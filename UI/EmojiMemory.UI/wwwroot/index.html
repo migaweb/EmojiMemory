@@ -29,7 +29,7 @@
     <script>
         (function () {
             const emojiBar = document.getElementById('emoji-progress');
-            const emoji = '🧠';
+            const emojis = ['😀','🎉','🤖','🚀','🦄','🌈','🍕','🎲','🎯','🏆'];
             let lastCount = -1;
 
             function update() {
@@ -40,7 +40,7 @@
 
                 const count = Math.floor(val / 10);
                 if (count !== lastCount) {
-                    emojiBar.textContent = emoji.repeat(count);
+                    emojiBar.textContent = emojis.slice(0, count).join('');
                     lastCount = count;
                 }
                 requestAnimationFrame(update);
