@@ -1,5 +1,7 @@
 using Microsoft.JSInterop;
+using System.Text.Json;
 using EmojiMemory.UI.Application.Contracts;
+using EmojiMemory.UI.Domain.Entities;
 
 namespace EmojiMemory.UI.Infrastructure.Storage;
 
@@ -13,18 +15,27 @@ public class LocalStorageHighscore : IHighscore
         _jsRuntime = jsRuntime;
     }
 
-    public async ValueTask SaveScoreAsync(int score)
+    public async ValueTask SaveScoreAsync(HighscoreEntry score)
     {
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", Key, score.ToString());
+        var json = JsonSerializer.Serialize(score);
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", Key, json);
     }
 
-    public async ValueTask<int?> GetScoreAsync()
+    public async ValueTask<HighscoreEntry?> GetScoreAsync()
     {
-        var result = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", Key);
-        if (int.TryParse(result, out var value))
+        var json = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", Key);
+        if (string.IsNullOrEmpty(json))
         {
-            return value;
+            return null;
         }
-        return null;
+
+        try
+        {
+            return JsonSerializer.Deserialize<HighscoreEntry>(json);
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
