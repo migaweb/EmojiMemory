@@ -126,12 +126,13 @@ public class GameEngineService
             Time = Session.ScoreBoard.TimeElapsed
         };
 
-        var existing = await _highscore.GetScoreAsync();
+        var size = Session.Board.GridSize;
+        var existing = await _highscore.GetScoreAsync(size);
         if (existing == null ||
             current.Time < existing.Time ||
             (current.Time == existing.Time && current.Score < existing.Score))
         {
-            await _highscore.SaveScoreAsync(current);
+            await _highscore.SaveScoreAsync(size, current);
         }
     }
 

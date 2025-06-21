@@ -2,6 +2,7 @@ using Microsoft.JSInterop;
 using System.Text.Json;
 using EmojiMemory.UI.Application.Contracts;
 using EmojiMemory.UI.Domain.Entities;
+using EmojiMemory.UI.Domain.ValueObjects;
 
 namespace EmojiMemory.UI.Infrastructure.Storage;
 
@@ -15,27 +16,36 @@ public class LocalStorageHighscore : IHighscore
         _jsRuntime = jsRuntime;
     }
 
-    public async ValueTask SaveScoreAsync(HighscoreEntry score)
+    public async ValueTask SaveScoreAsync(GridSize size, HighscoreEntry score)
     {
-        var json = JsonSerializer.Serialize(score);
+        var scores = await GetDictionaryAsync();
+        scores[$"{size.Rows}x{size.Columns}"] = score;
+        var json = JsonSerializer.Serialize(scores);
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", Key, json);
     }
 
-    public async ValueTask<HighscoreEntry?> GetScoreAsync()
+    public async ValueTask<HighscoreEntry?> GetScoreAsync(GridSize size)
+    {
+        var scores = await GetDictionaryAsync();
+        return scores.TryGetValue($"{size.Rows}x{size.Columns}", out var entry) ? entry : null;
+    }
+
+    private async ValueTask<Dictionary<string, HighscoreEntry>> GetDictionaryAsync()
     {
         var json = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", Key);
         if (string.IsNullOrEmpty(json))
         {
-            return null;
+            return new Dictionary<string, HighscoreEntry>();
         }
 
         try
         {
-            return JsonSerializer.Deserialize<HighscoreEntry>(json);
+            var result = JsonSerializer.Deserialize<Dictionary<string, HighscoreEntry>>(json);
+            return result ?? new Dictionary<string, HighscoreEntry>();
         }
         catch
         {
-            return null;
+            return new Dictionary<string, HighscoreEntry>();
         }
     }
 }
