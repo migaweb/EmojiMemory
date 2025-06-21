@@ -30,7 +30,7 @@ Unit tests for the game engine are located in `Test/EmojiMemory.Tests.UnitTests`
 
 ## Generated with ChatGPT Codex
 
-Much of the initial code was produced using ChatGPT Codex to quickly scaffold the project structure and core classes.
+All of the code, except some cleanup, was produced using ChatGPT Codex.
 
 ## Sound Effects
 
