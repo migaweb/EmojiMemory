@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\EmojiMemory.UI.Infrastructure\EmojiMemory.UI.Infrastructure.csproj" />
     <ProjectReference Include="..\EmojiMemory.UI.Application\EmojiMemory.UI.Application.csproj" />
-    <ProjectReference Include="..\EmojiMemory.UI.Infrastructure\EmojiMemory.UI.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
