@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using EmojiMemory.UI.Application.Contracts;
 using EmojiMemory.UI.Domain.Entities;
 using EmojiMemory.UI.Domain.Enums;
 using EmojiMemory.UI.Domain.ValueObjects;
@@ -8,9 +9,15 @@ namespace EmojiMemory.UI.Application.Services;
 public class GameEngineService
 {
     private readonly Stopwatch _stopwatch = new();
+    private readonly IHighscore _highscore;
     private Card? _firstCard;
     private Card? _secondCard;
     private List<EmojiId> _emojiPool = new();
+
+    public GameEngineService(IHighscore highscore)
+    {
+        _highscore = highscore;
+    }
 
     public GameSession Session { get; private set; } = new();
 
@@ -56,7 +63,7 @@ public class GameEngineService
         }
     }
 
-    public void EvaluateFlip()
+    public async Task EvaluateFlip()
     {
         if (_firstCard == null || _secondCard == null)
         {
@@ -83,6 +90,7 @@ public class GameEngineService
             Session.State = GameState.Completed;
             Session.Board.State = GameState.Completed;
             StopTimer();
+            await CheckHighscoreAsync();
         }
     }
 
@@ -108,6 +116,23 @@ public class GameEngineService
         Session.State = GameState.InProgress;
         Session.Board.State = GameState.InProgress;
         _stopwatch.Start();
+    }
+
+    private async ValueTask CheckHighscoreAsync()
+    {
+        var current = new HighscoreEntry
+        {
+            Score = Session.ScoreBoard.Moves,
+            Time = Session.ScoreBoard.TimeElapsed
+        };
+
+        var existing = await _highscore.GetScoreAsync();
+        if (existing == null ||
+            current.Time < existing.Time ||
+            (current.Time == existing.Time && current.Score < existing.Score))
+        {
+            await _highscore.SaveScoreAsync(current);
+        }
     }
 
     public void ResetGame()
