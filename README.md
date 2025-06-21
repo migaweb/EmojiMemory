@@ -16,3 +16,22 @@ A simple memory matching game built with Blazor WebAssembly. The project is inte
 4. Open the printed local address in your browser to play.
 
 For further design notes and game flow details, see [Emoji_Memory_Game_Design.md](Emoji_Memory_Game_Design.md).
+
+## Architecture
+
+The solution is organized using a lightweight layered approach:
+
+* **UI** – A Blazor WebAssembly project found under `UI/EmojiMemory.UI` which contains pages and Razor components.
+* **Application** – Services, repositories and contracts located in `UI/EmojiMemory.UI.Application`.
+* **Domain** – Entities, value objects and enums in `UI/EmojiMemory.UI.Domain`.
+* **Infrastructure** – Implementations for storage and sound playback under `EmojiMemory.UI.Infrastructure`.
+
+Unit tests for the game engine are located in `Test/EmojiMemory.Tests.UnitTests`.
+
+## Generated with ChatGPT Codex
+
+Much of the initial code was produced using ChatGPT Codex to quickly scaffold the project structure and core classes.
+
+## Sound Effects
+
+The sound effects included in `wwwroot/sounds` are taken from [Mixkit](https://mixkit.co/free-sound-effects/).
