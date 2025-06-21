@@ -51,6 +51,11 @@ public class GameEngineService
 
     public void FlipCard(Position position)
     {
+        if (_firstCard != null && _secondCard != null)
+        {
+            return;
+        }
+
         var card = Session.Board.Cards.FirstOrDefault(c => c.Position.Equals(position));
         if (card == null || card.State != CardState.FaceDown)
         {

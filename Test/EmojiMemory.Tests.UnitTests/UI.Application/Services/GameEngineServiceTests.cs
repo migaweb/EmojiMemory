@@ -63,6 +63,24 @@ public class GameEngineServiceTests
     }
 
     [Fact]
+    public void FlipCard_ThirdCardIgnored_WhenTwoCardsFaceUp()
+    {
+        var engine = new GameEngineService(new StubHighscore());
+        engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
+        var positions = engine.Session.Board.Cards.Select(c => c.Position).ToArray();
+
+        engine.FlipCard(positions[0]);
+        engine.FlipCard(positions[1]);
+
+        var third = positions[2];
+        engine.FlipCard(third);
+
+        var thirdCard = engine.Session.Board.Cards.First(c => c.Position.Equals(third));
+        Assert.Equal(CardState.FaceDown, thirdCard.State);
+        Assert.Equal(2, engine.Session.Board.Cards.Count(c => c.State == CardState.FaceUp));
+    }
+
+    [Fact]
     public void EvaluateFlip_MatchingCards_SetAsMatched()
     {
         var engine = new GameEngineService(new StubHighscore());
@@ -89,10 +107,12 @@ public class GameEngineServiceTests
         engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
         var positions = engine.Session.Board.Cards.Select(c => c.Position).ToArray();
 
-        foreach (var pos in positions)
-            engine.FlipCard(pos);
-
+        engine.FlipCard(positions[0]);
+        engine.FlipCard(positions[1]);
         engine.EvaluateFlip();
+
+        engine.FlipCard(positions[2]);
+        engine.FlipCard(positions[3]);
         engine.EvaluateFlip();
 
         Assert.Equal(GameState.Completed, engine.Session.State);
