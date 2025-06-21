@@ -4,15 +4,13 @@ using Microsoft.JSInterop;
 
 namespace EmojiMemory.UI.Infrastructure.Sound;
 
-public class SoundService : ISoundService
+public class SoundService(IJSRuntime js) : ISoundService
 {
-  private readonly IJSRuntime js;
-
-  public SoundService(IJSRuntime js) => this.js = js;
+  private readonly IJSRuntime _js = js;
 
   public async Task PlayAsync(SoundEffect soundEffect)
   {
-    await js.InvokeVoidAsync("soundPlayer.play", soundEffect.ToString());
+    await _js.InvokeVoidAsync("soundPlayer.play", soundEffect.ToString());
   }
 }
 
