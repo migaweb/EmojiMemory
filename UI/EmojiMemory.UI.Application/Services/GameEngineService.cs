@@ -6,10 +6,11 @@ using EmojiMemory.UI.Domain.ValueObjects;
 
 namespace EmojiMemory.UI.Application.Services;
 
-public class GameEngineService(IHighscore highscore)
+public class GameEngineService(IHighscore highscore, ISoundService soundService)
 {
     private readonly Stopwatch _stopwatch = new();
     private readonly IHighscore _highscore = highscore;
+    private readonly ISoundService _soundService = soundService;
     private Card? _firstCard;
     private Card? _secondCard;
     private List<EmojiId> _emojiPool = [];
@@ -58,6 +59,7 @@ public class GameEngineService(IHighscore highscore)
         }
 
         card.State = CardState.FaceUp;
+        _ = _soundService.PlayAsync(SoundEffect.Flip);
         if (_firstCard == null)
         {
             _firstCard = card;
@@ -77,11 +79,13 @@ public class GameEngineService(IHighscore highscore)
         {
             _firstCard.State = CardState.Matched;
             _secondCard.State = CardState.Matched;
+            await _soundService.PlayAsync(SoundEffect.Match);
         }
         else
         {
             _firstCard.State = CardState.FaceDown;
             _secondCard.State = CardState.FaceDown;
+            await _soundService.PlayAsync(SoundEffect.Mismatch);
         }
 
         _firstCard = null;
@@ -93,6 +97,7 @@ public class GameEngineService(IHighscore highscore)
             Session.Board.State = GameState.Completed;
             StopTimer();
             await CheckHighscoreAsync();
+            await _soundService.PlayAsync(SoundEffect.Win);
             NotifyStateChanged();
         }
     }

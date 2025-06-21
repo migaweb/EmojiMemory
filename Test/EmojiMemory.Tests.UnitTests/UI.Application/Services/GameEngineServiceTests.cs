@@ -25,6 +25,17 @@ public class GameEngineServiceTests
         }
     }
 
+    private class StubSoundService : ISoundService
+    {
+        public List<SoundEffect> Played { get; } = [];
+
+        public Task PlayAsync(SoundEffect soundEffect)
+        {
+            Played.Add(soundEffect);
+            return Task.CompletedTask;
+        }
+    }
+
     private static readonly EmojiId[] _emojis =
     [
         new EmojiId("😀"),
@@ -36,7 +47,7 @@ public class GameEngineServiceTests
     [Fact]
     public void StartGame_InitializesSessionWithCards()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 4), _emojis.Take(4));
 
         Assert.Equal(GameState.InProgress, engine.Session.State);
@@ -48,7 +59,7 @@ public class GameEngineServiceTests
     [Fact]
     public void FlipCard_FlipsFaceDownCard()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 4), _emojis.Take(4));
         var pos = engine.Session.Board.Cards.First().Position;
 
@@ -61,7 +72,7 @@ public class GameEngineServiceTests
     [Fact]
     public void FlipCard_ThirdCardIgnored_WhenTwoCardsFaceUp()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
         var positions = engine.Session.Board.Cards.Select(c => c.Position).ToArray();
 
@@ -79,7 +90,7 @@ public class GameEngineServiceTests
     [Fact]
     public async Task EvaluateFlip_MatchingCards_SetAsMatched()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 4), _emojis.Take(4));
         var pair = engine.Session.Board.Cards
             .GroupBy(c => c.Emoji)
@@ -99,7 +110,7 @@ public class GameEngineServiceTests
     [Fact]
     public async Task EvaluateFlip_AllCardsMatched_EndsGame()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
         var positions = engine.Session.Board.Cards.Select(c => c.Position).ToArray();
 
@@ -118,7 +129,7 @@ public class GameEngineServiceTests
     [Fact]
     public void PauseGame_SetsStateToPaused()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
 
         engine.PauseGame();
@@ -130,7 +141,7 @@ public class GameEngineServiceTests
     [Fact]
     public void ResumeGame_FromPaused_SetsStateToInProgress()
     {
-        var engine = new GameEngineService(new StubHighscore());
+        var engine = new GameEngineService(new StubHighscore(), new StubSoundService());
         engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
         engine.PauseGame();
 
