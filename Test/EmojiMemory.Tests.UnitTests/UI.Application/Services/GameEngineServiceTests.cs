@@ -1,12 +1,8 @@
-using EmojiMemory.UI.Application.Services;
 using EmojiMemory.UI.Application.Contracts;
+using EmojiMemory.UI.Application.Services;
 using EmojiMemory.UI.Domain.Entities;
 using EmojiMemory.UI.Domain.Enums;
 using EmojiMemory.UI.Domain.ValueObjects;
-using Xunit;
-using System.Linq;
-using System;
-using System.Collections.Generic;
 
 namespace EmojiMemory.Tests.UnitTests.UI.Application.Services;
 
@@ -14,7 +10,7 @@ public class GameEngineServiceTests
 {
     private class StubHighscore : IHighscore
     {
-        public Dictionary<string, HighscoreEntry?> Stored { get; } = new();
+        public Dictionary<string, HighscoreEntry?> Stored { get; } = [];
 
         public ValueTask SaveScoreAsync(GridSize size, HighscoreEntry score)
         {
@@ -29,13 +25,13 @@ public class GameEngineServiceTests
         }
     }
 
-    private static readonly EmojiId[] _emojis = new[]
-    {
+    private static readonly EmojiId[] _emojis =
+    [
         new EmojiId("😀"),
         new EmojiId("🎉"),
         new EmojiId("🚀"),
         new EmojiId("🍕")
-    };
+    ];
 
     [Fact]
     public void StartGame_InitializesSessionWithCards()
@@ -81,7 +77,7 @@ public class GameEngineServiceTests
     }
 
     [Fact]
-    public void EvaluateFlip_MatchingCards_SetAsMatched()
+    public async Task EvaluateFlip_MatchingCards_SetAsMatched()
     {
         var engine = new GameEngineService(new StubHighscore());
         engine.StartGame(new GridSize(2, 4), _emojis.Take(4));
@@ -93,7 +89,7 @@ public class GameEngineServiceTests
 
         engine.FlipCard(pair[0]);
         engine.FlipCard(pair[1]);
-        engine.EvaluateFlip();
+        await engine.EvaluateFlip();
 
         var cards = engine.Session.Board.Cards.Where(c => pair.Contains(c.Position)).ToList();
         Assert.All(cards, c => Assert.Equal(CardState.Matched, c.State));
@@ -101,7 +97,7 @@ public class GameEngineServiceTests
     }
 
     [Fact]
-    public void EvaluateFlip_AllCardsMatched_EndsGame()
+    public async Task EvaluateFlip_AllCardsMatched_EndsGame()
     {
         var engine = new GameEngineService(new StubHighscore());
         engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
@@ -109,11 +105,11 @@ public class GameEngineServiceTests
 
         engine.FlipCard(positions[0]);
         engine.FlipCard(positions[1]);
-        engine.EvaluateFlip();
+        await engine.EvaluateFlip();
 
         engine.FlipCard(positions[2]);
         engine.FlipCard(positions[3]);
-        engine.EvaluateFlip();
+        await engine.EvaluateFlip();
 
         Assert.Equal(GameState.Completed, engine.Session.State);
         Assert.Equal(GameState.Completed, engine.Session.Board.State);

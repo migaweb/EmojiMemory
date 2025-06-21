@@ -12,10 +12,10 @@
 }
 
 .resume-button {
-  background-color: #ffffff;
+  background-color: transparent;
   border: none;
   border-radius: 12px;
   font-size: 3rem;
-  padding: 0.5rem 1rem;
+  padding: 0 0;
   cursor: pointer;
 }

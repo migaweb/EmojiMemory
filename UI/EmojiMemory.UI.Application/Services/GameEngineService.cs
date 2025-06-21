@@ -6,30 +6,25 @@ using EmojiMemory.UI.Domain.ValueObjects;
 
 namespace EmojiMemory.UI.Application.Services;
 
-public class GameEngineService
+public class GameEngineService(IHighscore highscore)
 {
     private readonly Stopwatch _stopwatch = new();
-    private readonly IHighscore _highscore;
+    private readonly IHighscore _highscore = highscore;
     private Card? _firstCard;
     private Card? _secondCard;
-    private List<EmojiId> _emojiPool = new();
+    private List<EmojiId> _emojiPool = [];
 
     public event Action? StateChanged;
 
     private void NotifyStateChanged() => StateChanged?.Invoke();
 
-    public GameEngineService(IHighscore highscore)
-    {
-        _highscore = highscore;
-    }
-
-    public GameSession Session { get; private set; } = new();
+  public GameSession Session { get; private set; } = new();
 
     public TimeSpan Elapsed => _stopwatch.Elapsed;
 
     public void StartGame(GridSize size, IEnumerable<EmojiId> emojis)
     {
-        _emojiPool = emojis.ToList();
+        _emojiPool = [.. emojis];
         var cards = BuildCards(size, _emojiPool);
         Session = new GameSession
         {
@@ -67,10 +62,7 @@ public class GameEngineService
         {
             _firstCard = card;
         }
-        else if (_secondCard == null)
-        {
-            _secondCard = card;
-        }
+        else _secondCard ??= card;
     }
 
     public async Task EvaluateFlip()
@@ -164,7 +156,7 @@ public class GameEngineService
 
         var deck = emojiList.Concat(emojiList).ToList();
         var rng = new Random();
-        deck = deck.OrderBy(_ => rng.Next()).ToList();
+        deck = [.. deck.OrderBy(_ => rng.Next())];
 
         var cards = new List<Card>();
         int index = 0;
