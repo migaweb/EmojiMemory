@@ -29,3 +29,10 @@
     background-color: #c8e6c9;
     cursor: default;
   }
+
+.game-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}

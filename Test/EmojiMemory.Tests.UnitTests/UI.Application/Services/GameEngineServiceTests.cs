@@ -79,4 +79,29 @@ public class GameEngineServiceTests
         Assert.Equal(GameState.Completed, engine.Session.State);
         Assert.Equal(GameState.Completed, engine.Session.Board.State);
     }
+
+    [Fact]
+    public void PauseGame_SetsStateToPaused()
+    {
+        var engine = new GameEngineService();
+        engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
+
+        engine.PauseGame();
+
+        Assert.Equal(GameState.Paused, engine.Session.State);
+        Assert.Equal(GameState.Paused, engine.Session.Board.State);
+    }
+
+    [Fact]
+    public void ResumeGame_FromPaused_SetsStateToInProgress()
+    {
+        var engine = new GameEngineService();
+        engine.StartGame(new GridSize(2, 2), _emojis.Take(2));
+        engine.PauseGame();
+
+        engine.ResumeGame();
+
+        Assert.Equal(GameState.InProgress, engine.Session.State);
+        Assert.Equal(GameState.InProgress, engine.Session.Board.State);
+    }
 }
