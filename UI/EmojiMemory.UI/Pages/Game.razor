@@ -30,6 +30,10 @@
           </button>
         }
       </div>
+      @if (GameEngine.Session.State == GameState.Paused)
+      {
+        <PauseOverlayComponent />
+      }
       @if (GameEngine.Session.State == GameState.Completed)
       {
         <GameOver OnPlayAgain="StartNewGame" OnBackToMenu="GoToMenu" />

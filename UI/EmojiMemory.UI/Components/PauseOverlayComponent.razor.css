@@ -1,0 +1,21 @@
+.pause-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.resume-button {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 3rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
