@@ -30,7 +30,11 @@
           </button>
         }
       </div>
-    }
+      @if (GameEngine.Session.State == GameState.Completed)
+      {
+        <GameOver OnPlayAgain="StartNewGame" OnBackToMenu="GoToMenu" />
+      }
+      }
   </div>
 
 @code {
@@ -79,5 +83,16 @@
       boardLocked = false;
       StateHasChanged();
     }
+  }
+
+  private void StartNewGame()
+  {
+    InitializeGame();
+    StateHasChanged();
+  }
+
+  private void GoToMenu()
+  {
+    NavigationManager.NavigateTo("/");
   }
 }
