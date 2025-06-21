@@ -1,0 +1,14 @@
+.pause-button {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pause-button:hover {
+  background-color: #e0e0e0;
+}

@@ -1,0 +1,20 @@
+@inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
+@using EmojiMemory.UI.Domain.Enums
+
+<button class="pause-button" @onclick="Toggle">@Label</button>
+
+@code {
+    private string Label => GameEngine.Session.State == GameState.Paused ? "Resume" : "Pause";
+
+    private void Toggle()
+    {
+        if (GameEngine.Session.State == GameState.Paused)
+        {
+            GameEngine.ResumeGame();
+        }
+        else if (GameEngine.Session.State == GameState.InProgress)
+        {
+            GameEngine.PauseGame();
+        }
+    }
+}
