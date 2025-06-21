@@ -1,4 +1,5 @@
-﻿@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager
+@inject EmojiMemory.UI.Application.Contracts.IHighscore Highscore
 
 <div class="start-screen">
   <div class="title-section">
@@ -15,14 +16,23 @@
   <button type="button" class="start-button" @onclick="StartGame">Start Game (@(rows)x@(cols))</button>
 
   <div class="best-time">
-    <span>⏱️ Best Time: <strong>@BestTime</strong></span>
+    <span>🏆 Highscore: <strong>@HighscoreText</strong></span>
   </div>
 </div>
 
 @code {
   private int rows = 4;
   private int cols = 4;
-  private string BestTime => "00:42"; // Replace with localStorage or persistent state later
+  private EmojiMemory.UI.Domain.Entities.HighscoreEntry? _entry;
+
+  private string HighscoreText => _entry == null
+    ? "--"
+    : $"{_entry.Score} moves in {_entry.Time.ToString(@"mm\:ss")}";
+
+  protected override async Task OnInitializedAsync()
+  {
+    _entry = await Highscore.GetScoreAsync();
+  }
 
   private void SetDifficulty(int r, int c)
   {
@@ -35,4 +45,3 @@
     NavigationManager.NavigateTo($"/game?rows={rows}&cols={cols}");
   }
 }
-
