@@ -79,13 +79,13 @@ public class GameEngineService(IHighscore highscore, ISoundService soundService)
         {
             _firstCard.State = CardState.Matched;
             _secondCard.State = CardState.Matched;
-            await _soundService.PlayAsync(SoundEffect.Match);
+            _ = _soundService.PlayAsync(SoundEffect.Match);
         }
         else
         {
             _firstCard.State = CardState.FaceDown;
             _secondCard.State = CardState.FaceDown;
-            await _soundService.PlayAsync(SoundEffect.Mismatch);
+            _ = _soundService.PlayAsync(SoundEffect.Mismatch);
         }
 
         _firstCard = null;
@@ -97,7 +97,7 @@ public class GameEngineService(IHighscore highscore, ISoundService soundService)
             Session.Board.State = GameState.Completed;
             StopTimer();
             await CheckHighscoreAsync();
-            await _soundService.PlayAsync(SoundEffect.Win);
+            _ = _soundService.PlayAsync(SoundEffect.Win);
             NotifyStateChanged();
         }
     }
