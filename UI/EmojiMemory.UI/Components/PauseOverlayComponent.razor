@@ -1,0 +1,12 @@
+@inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
+
+<div class="pause-overlay">
+    <button class="resume-button" @onclick="Resume">▶️</button>
+</div>
+
+@code {
+    private void Resume()
+    {
+        GameEngine.ResumeGame();
+    }
+}
