@@ -54,6 +54,12 @@
 
   protected override void OnInitialized()
   {
+    if (!IsValidGrid(Rows, Cols))
+    {
+      NavigationManager.NavigateTo("/");
+      return;
+    }
+
     GameEngine.StateChanged += OnStateChanged;
     InitializeGame();
   }
@@ -109,5 +115,10 @@
   private void OnStateChanged()
   {
     InvokeAsync(StateHasChanged);
+  }
+
+  private static bool IsValidGrid(int rows, int cols)
+  {
+    return (rows == 4 && cols == 4) || (rows == 5 && cols == 4);
   }
 }
