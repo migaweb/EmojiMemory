@@ -1,5 +1,6 @@
 @inject NavigationManager NavigationManager
 @inject EmojiMemory.UI.Application.Contracts.IHighscore Highscore
+@using EmojiMemory.UI.Domain.ValueObjects
 
 <div class="start-screen">
   <div class="title-section">
@@ -9,8 +10,8 @@
   </div>
 
   <div class="difficulty-buttons">
-    <button type="button" class="easy" @onclick="() => SetDifficulty(4, 4)">Easy (4x4)</button>
-    <button type="button" class="hard" @onclick="() => SetDifficulty(5, 4)">Hard (5x4)</button>
+    <button type="button" class="easy" @onclick="@(async () => await SetDifficulty(4, 4))">Easy (4x4)</button>
+    <button type="button" class="hard" @onclick="@(async () => await SetDifficulty(5, 4))">Hard (5x4)</button>
   </div>
 
   <button type="button" class="start-button" @onclick="StartGame">Start Game (@(rows)x@(cols))</button>
@@ -31,13 +32,14 @@
 
   protected override async Task OnInitializedAsync()
   {
-    _entry = await Highscore.GetScoreAsync();
+    _entry = await Highscore.GetScoreAsync(new GridSize(rows, cols));
   }
 
-  private void SetDifficulty(int r, int c)
+  private async Task SetDifficulty(int r, int c)
   {
     rows = r;
     cols = c;
+    _entry = await Highscore.GetScoreAsync(new GridSize(rows, cols));
   }
 
   private void StartGame()

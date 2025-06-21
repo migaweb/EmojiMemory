@@ -6,6 +6,7 @@ using EmojiMemory.UI.Domain.ValueObjects;
 using Xunit;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace EmojiMemory.Tests.UnitTests.UI.Application.Services;
 
@@ -13,17 +14,18 @@ public class GameEngineServiceTests
 {
     private class StubHighscore : IHighscore
     {
-        public HighscoreEntry? Stored { get; private set; }
+        public Dictionary<string, HighscoreEntry?> Stored { get; } = new();
 
-        public ValueTask SaveScoreAsync(HighscoreEntry score)
+        public ValueTask SaveScoreAsync(GridSize size, HighscoreEntry score)
         {
-            Stored = score;
+            Stored[$"{size.Rows}x{size.Columns}"] = score;
             return ValueTask.CompletedTask;
         }
 
-        public ValueTask<HighscoreEntry?> GetScoreAsync()
+        public ValueTask<HighscoreEntry?> GetScoreAsync(GridSize size)
         {
-            return ValueTask.FromResult<HighscoreEntry?>(Stored);
+            Stored.TryGetValue($"{size.Rows}x{size.Columns}", out var entry);
+            return ValueTask.FromResult(entry);
         }
     }
 
