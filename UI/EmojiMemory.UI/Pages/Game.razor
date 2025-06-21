@@ -2,6 +2,7 @@
 @implements IDisposable
 @inject NavigationManager NavigationManager
 @inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
+@inject EmojiMemory.UI.Application.Contracts.IEmojiRepository EmojiRepository
 @using EmojiMemory.UI.Domain.Entities
 @using EmojiMemory.UI.Domain.Enums
 @using EmojiMemory.UI.Domain.ValueObjects
@@ -50,7 +51,6 @@
   [SupplyParameterFromQuery] public int Cols { get; set; } = 4;
 
   private bool boardLocked = false;
-  private static readonly string[] EmojiPool = new[] { "🐶", "🍕", "🚀", "🐸", "🎈", "🎮", "🎁", "🧠", "🐱", "🍩" };
 
   protected override void OnInitialized()
   {
@@ -66,10 +66,9 @@
   private void InitializeGame()
   {
     var totalCards = Rows * Cols;
-    var emojis = EmojiPool
+    var emojis = EmojiRepository.GetEmojis()
       .OrderBy(_ => Guid.NewGuid())
-      .Take(totalCards / 2)
-      .Select(e => new EmojiId(e));
+      .Take(totalCards / 2);
 
     GameEngine.StartGame(new GridSize(Rows, Cols), emojis);
   }
