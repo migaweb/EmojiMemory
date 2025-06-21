@@ -8,6 +8,10 @@
 <PageTitle>Emoji Memory Match</PageTitle>
 
   <div class="game-container">
+    @if (GameEngine.Session.State != GameState.NotStarted)
+    {
+      <Timer />
+    }
     @if (GameEngine.Session.Board.Cards.Count <= 0)
     {
       <p>Loading game...</p>
