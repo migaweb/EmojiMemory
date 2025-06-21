@@ -1,0 +1,37 @@
+@inject EmojiMemory.UI.Application.Services.GameEngineService GameEngine
+
+<div class="game-over-overlay">
+  <div class="game-over-box">
+    <h2>Game Over!</h2>
+    <p>You matched all the cards!</p>
+    <p class="stats">
+      Time: @GameEngine.Session.ScoreBoard.TimeElapsed.ToString(@"mm\:ss")<br />
+      Moves: @GameEngine.Session.ScoreBoard.Moves
+    </p>
+    <div class="buttons">
+      <button class="play-again" @onclick="OnPlayAgainClicked">Play Again</button>
+      <button class="back-menu" @onclick="OnBackToMenuClicked">Back to Menu</button>
+    </div>
+  </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnPlayAgain { get; set; }
+    [Parameter] public EventCallback OnBackToMenu { get; set; }
+
+    private async Task OnPlayAgainClicked()
+    {
+        if (OnPlayAgain.HasDelegate)
+        {
+            await OnPlayAgain.InvokeAsync();
+        }
+    }
+
+    private async Task OnBackToMenuClicked()
+    {
+        if (OnBackToMenu.HasDelegate)
+        {
+            await OnBackToMenu.InvokeAsync();
+        }
+    }
+}
